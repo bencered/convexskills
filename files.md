@@ -1,124 +1,70 @@
-# Codebase Files
+# Codebase Structure
 
-Brief description of each file in the repository.
+```
+convex-skills/
+├── skills/
+│   └── convex/                       # Consolidated Convex skill
+│       ├── SKILL.md                  # Main entry point (decision trees, reference index)
+│       ├── assets/                   # Logo files
+│       │   ├── large-logo.png
+│       │   └── small-logo.svg
+│       └── references/               # Detailed reference docs
+│           ├── functions.md          # Queries, mutations, actions
+│           ├── schema-validator.md   # Database schemas and validators
+│           ├── realtime.md           # Reactive subscriptions
+│           ├── http-actions.md       # HTTP endpoints, webhooks
+│           ├── file-storage.md       # File uploads and serving
+│           ├── cron-jobs.md          # Scheduled background tasks
+│           ├── migrations.md         # Schema evolution, data backfills
+│           ├── agents.md             # AI agents with tools
+│           ├── component-authoring.md # Reusable Convex packages
+│           ├── best-practices.md     # General patterns and guidelines
+│           ├── security-check.md     # Quick security checklist
+│           ├── security-audit.md     # Deep security review
+│           └── avoid-feature-creep.md # Preventing scope creep
+│
+├── command/
+│   └── convex.md                     # /convex slash command
+│
+├── templates/                        # Templates for forking developers
+│   ├── CLAUDE.md                     # Project context template
+│   └── skills/
+│       ├── dev.md                    # Full-stack development practices
+│       ├── help.md                   # Problem-solving methodology
+│       ├── gitrules.md               # Git safety protocols
+│       └── README.md                 # Template installation guide
+│
+├── .claude-plugin/                   # Claude Code plugin config
+│   ├── plugin.json
+│   └── marketplace.json
+│
+├── .cursor-plugin/                   # Cursor plugin config
+│   ├── plugin.json
+│   └── marketplace.json
+│
+├── .codex/                           # Codex integration
+│   └── README.md
+│
+├── bin/
+│   └── cli.js                        # CLI entry point (convex-skills command)
+│
+├── index.js                          # Programmatic API
+├── package.json                      # npm package config (v2.0.0)
+├── AGENTS.md                         # Agent-facing documentation
+├── agents.md                         # Passive context for AI agents
+├── CLAUDE.md                         # Claude Code configuration
+├── GEMINI.md                         # Gemini CLI integration
+├── README.md                         # Project overview
+├── CONTRIBUTING.md                   # Contribution guidelines
+├── changelog.md                      # Version history
+├── docs.md                           # Documentation index
+├── files.md                          # This file
+└── LICENSE                           # Apache-2.0
+```
 
-## Root Files
+## Key Files
 
-| File              | Description                                                      |
-| ----------------- | ---------------------------------------------------------------- |
-| `AGENTS.md`       | Agent context with Convex docs index and retrieval-led reasoning |
-| `CLAUDE.md`       | Claude Code project context (mirrors AGENTS.md)                  |
-| `CONTRIBUTING.md` | Contribution guidelines                                          |
-| `GEMINI.md`       | Gemini CLI integration with llms.txt reference                   |
-| `LICENSE`         | Apache-2.0 license                                               |
-| `README.md`       | Project overview, links to official Convex Agent Plugins, and installation |
-| `changelog.md`    | Version history following keepachangelog format                  |
-| `files.md`        | This file, codebase structure reference                          |
-| `task.md`         | Completed task tracking                                          |
-
-## Skills Directory (`skills/`)
-
-Core Convex skills for AI agents. Each skill has `name` matching folder name for `/skill` commands. Each skill includes `agents/openai.yaml` plus `assets/small-logo.svg` and `assets/large-logo.png` for Codex UI icons and metadata.
-
-| Skill                                 | Description                                                            |
-| ------------------------------------- | ---------------------------------------------------------------------- |
-| `avoid-feature-creep/SKILL.md`        | Prevent scope creep in development                                     |
-| `convex/SKILL.md`                     | Umbrella index for all Convex skills                                   |
-| `convex-agents/SKILL.md`              | Building AI agents with Convex                                         |
-| `convex-best-practices/SKILL.md`      | Production-ready app guidelines with ESLint setup in Code Quality      |
-| `convex-component-authoring/SKILL.md` | Creating reusable Convex components                                    |
-| `convex-cron-jobs/SKILL.md`           | Scheduled functions and background tasks                               |
-| `convex-file-storage/SKILL.md`        | File upload, storage, and serving                                      |
-| `convex-functions/SKILL.md`           | Queries, mutations, actions                                            |
-| `convex-http-actions/SKILL.md`        | HTTP endpoints and webhooks                                            |
-| `convex-migrations/SKILL.md`          | Schema evolution and data migrations                                   |
-| `convex-realtime/SKILL.md`            | Reactive patterns and subscriptions                                    |
-| `convex-schema-validator/SKILL.md`    | Schema definition and validation                                       |
-| `convex-security-audit/SKILL.md`      | Deep security review patterns                                          |
-| `convex-security-check/SKILL.md`      | Quick security audit checklist                                         |
-
-## Command Directory (`command/`)
-
-Slash command definitions for OpenCode integration.
-
-| File        | Description                                            |
-| ----------- | ------------------------------------------------------ |
-| `convex.md` | `/convex` slash command entrypoint with decision trees |
-
-## Templates Directory (`templates/`)
-
-Templates for developers to copy when forking.
-
-| File                 | Description                                  |
-| -------------------- | -------------------------------------------- |
-| `CLAUDE.md`          | Project context template for Convex projects |
-| `skills/README.md`   | Installation guide for skill templates       |
-| `skills/dev.md`      | Full-stack development practices template    |
-| `skills/help.md`     | Problem-solving methodology template         |
-| `skills/gitrules.md` | Git safety protocols template                |
-
-## Claude Skills Directory (`.claude/skills/`)
-
-Active Claude Code skills for this repository.
-
-| File          | Description                       |
-| ------------- | --------------------------------- |
-| `convex.md`   | Convex-specific coding guidelines |
-| `dev.md`      | Full-stack development practices  |
-| `gitrules.md` | Git safety protocols              |
-| `help.md`     | Problem-solving methodology       |
-| `write.md`    | Writing style guide               |
-
-## Standard Agent Skills Directory (`.agents/skills/`)
-
-Compatibility skills path for tools that scan `.agents/skills`.
-
-| Directory | Description                                               |
-| --------- | --------------------------------------------------------- |
-| `skills/` | Target directory created by CLI or symlinked to `skills/` |
-
-## PRDs Directory (`prds/`)
-
-Product requirement documents and planning.
-
-| File                                          | Description                                   |
-| --------------------------------------------- | --------------------------------------------- |
-| `CLAUDE-MD-STRATEGY.md`                       | Strategy for CLAUDE.md templates              |
-| `CLAUDE-MD-STRATEGY_1.md`                     | Alternate strategy document                   |
-| `convex-skills-updates-plan.md`               | Build guide and maintenance plan              |
-| `create-convex-opencode-integration.md`       | OpenCode integration spec                     |
-| `future-skills-exploration.md`                | Future skills roadmap                         |
-| `how-it-works.md`                             | AGENTS.md vs Skills dual approach explanation |
-| `MARKETPLACE-SUBMISSION.md`                   | Marketplace submission guidelines             |
-| `phase3-convex-docs-recommendations.md`       | Convex docs improvement recommendations       |
-| `phase4-convex-ai-website-recommendations.md` | convex.dev/ai recommendations                 |
-| `skillsplan.md`                               | Skills development plan                       |
-
-## OpenCode Directory (`.opencode/`)
-
-OpenCode plugin configuration and templates.
-
-| Directory     | Description                             |
-| ------------- | --------------------------------------- |
-| `agent/`      | Agent templates for orchestration       |
-| `command/`    | Command templates for Convex operations |
-| `plugin/`     | Plugin hooks and tools                  |
-| `skill/`      | OpenCode-specific skills                |
-| `config.json` | Plugin configuration                    |
-
-## Codex Directory (`.codex/`)
-
-Codex CLI skills integration.
-
-| File        | Description                          |
-| ----------- | ------------------------------------ |
-| `README.md` | Codex setup and symlink instructions |
-
-## Cursor Directory (`.cursor/`)
-
-Cursor IDE configuration.
-
-| Directory | Description                |
-| --------- | -------------------------- |
-| `plans/`  | Development plans          |
-| `rules/`  | Workspace rules for Cursor |
+- **`skills/convex/SKILL.md`** — The main skill file. Agents load this first, then drill into references as needed (progressive disclosure).
+- **`index.js`** — Programmatic API: `getSkill()`, `getReference()`, `listReferences()`, `REFERENCES`.
+- **`bin/cli.js`** — CLI: `convex-skills install`, `convex-skills list`, `convex-skills show [reference]`.
+- **`agents.md`** — Always-loaded passive context with Convex docs index and quick reference patterns.

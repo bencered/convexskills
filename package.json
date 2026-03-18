@@ -1,6 +1,6 @@
 {
   "name": "@waynesutton/convex-skills",
-  "version": "1.0.9",
+  "version": "2.0.0",
   "description": "For official Convex Skills use Convex Agent Plugins at https://github.com/get-convex/convex-agent-plugins. This package provides unofficial agent skills for building production-ready Convex applications.",
   "author": "Wayne Sutton - @waynesutton",
   "license": "Apache-2.0",
@@ -33,12 +33,13 @@
   },
   "files": [
     "skills/**/*.md",
+    "skills/**/*.png",
+    "skills/**/*.svg",
     "templates/**/*.md",
-    "AGENTS.md",
-    "CLAUDE.md",
     "GEMINI.md",
     "index.js",
-    "bin/"
+    "bin/",
+    "agents.md"
   ],
   "scripts": {
     "prepublishOnly": "echo 'Publishing convex-skills to npm...'",

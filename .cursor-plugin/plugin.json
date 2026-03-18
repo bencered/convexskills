@@ -1,0 +1,11 @@
+{
+  "name": "convex-skills",
+  "description": "Skills for building production-ready applications with Convex",
+  "version": "2.0.0",
+  "author": {
+    "name": "Convex"
+  },
+  "skills": [
+    "skills/convex"
+  ]
+}

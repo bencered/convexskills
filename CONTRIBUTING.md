@@ -22,7 +22,7 @@ Thank you for your interest in contributing to Convex Skills.
 
 When creating or modifying skills:
 
-1. **Follow the Template**: Use the Anthropic-approved skill format in `skills/template/SKILL.md`
+1. **Follow the Format**: Use `skills/convex/SKILL.md` as the canonical example of skill structure
 2. **Fetch Documentation**: Always reference the latest Convex documentation
 3. **Include Examples**: Provide working code examples
 4. **Test Thoroughly**: Verify all code examples work correctly
@@ -55,4 +55,4 @@ For questions about contributing, open a GitHub Discussion or reach out to the C
 
 ## License
 
-By contributing, you agree that your contributions will be licensed under the MIT License.
+By contributing, you agree that your contributions will be licensed under the Apache License, Version 2.0.

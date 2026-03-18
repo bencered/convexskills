@@ -30,83 +30,43 @@ When working on Convex code, consult the llms.txt index before relying on traini
 
 ## Overview
 
-This repository provides two complementary approaches for AI coding agents:
+This repository provides a consolidated Convex skill with reference docs for specific topics.
 
-1. **Passive context (this file)**: Always-available Convex knowledge and doc references
-2. **Skills (on-demand)**: Task-specific workflows for explicit invocation
+## Skill Structure
 
-## Available Skills
-
-| Skill                                                                    | Description                                           |
-| ------------------------------------------------------------------------ | ----------------------------------------------------- |
-| [convex-best-practices](skills/convex-best-practices/SKILL.md)           | Guidelines for building production-ready Convex apps  |
-| [convex-functions](skills/convex-functions/SKILL.md)                     | Writing queries, mutations, actions, and HTTP actions |
-| [convex-realtime](skills/convex-realtime/SKILL.md)                       | Patterns for building reactive applications           |
-| [convex-schema-validator](skills/convex-schema-validator/SKILL.md)       | Database schema definition and validation             |
-| [convex-file-storage](skills/convex-file-storage/SKILL.md)               | File upload, storage, and serving                     |
-| [convex-agents](skills/convex-agents/SKILL.md)                           | Building AI agents with Convex                        |
-| [convex-cron-jobs](skills/convex-cron-jobs/SKILL.md)                     | Scheduled functions and background tasks              |
-| [convex-http-actions](skills/convex-http-actions/SKILL.md)               | HTTP endpoints and webhook handling                   |
-| [convex-migrations](skills/convex-migrations/SKILL.md)                   | Schema evolution and data migrations                  |
-| [convex-security-check](skills/convex-security-check/SKILL.md)           | Quick security audit checklist                        |
-| [convex-security-audit](skills/convex-security-audit/SKILL.md)           | Deep security review patterns                         |
-| [convex-component-authoring](skills/convex-component-authoring/SKILL.md) | Creating reusable Convex components                   |
-
-## Skill Format
-
-Each skill follows the Agent Skills specification with YAML frontmatter:
-
-```markdown
----
-name: skill-name
-description: What the skill does and when to use it
-version: 1.0.0
-author: Convex
-tags: [convex, ...]
----
-
-# Skill Name
-
-## Documentation Sources
-
-Links to official documentation
-
-## Instructions
-
-Step-by-step guidance
-
-## Examples
-
-Code examples
-
-## Best Practices
-
-Guidelines and patterns
-
-## References
-
-Additional resources
+```
+skills/convex/
+├── SKILL.md                          # Main entry point with decision trees
+└── references/
+    ├── functions.md                  # Queries, mutations, actions
+    ├── schema-validator.md           # Database schemas and validators
+    ├── realtime.md                   # Reactive subscriptions
+    ├── http-actions.md               # Webhooks and HTTP endpoints
+    ├── file-storage.md               # File uploads and serving
+    ├── cron-jobs.md                  # Scheduled background tasks
+    ├── migrations.md                 # Schema evolution and data backfills
+    ├── agents.md                     # AI agents with tools
+    ├── component-authoring.md        # Reusable Convex packages
+    ├── best-practices.md             # General patterns and guidelines
+    ├── security-check.md             # Quick security checklist
+    ├── security-audit.md             # Deep security review
+    └── avoid-feature-creep.md        # Preventing scope creep
 ```
 
 ## Usage
 
-Skills are automatically available once installed. The agent will use them when relevant tasks are detected.
+The skill is automatically available once installed. The agent will load `SKILL.md` when relevant tasks are detected, then drill into specific references as needed.
 
 **Examples:**
 
 ```
 Help me set up file uploads in Convex
-```
-
-```
 Create a cron job to clean up expired sessions
-```
-
-```
 Add a Stripe webhook endpoint
+Build an AI agent with Convex
 ```
 
-### Slash Command (OpenCode)
+### Slash Command
 
 Use the `/convex` slash command for contextual guidance:
 
@@ -115,8 +75,6 @@ Use the `/convex` slash command for contextual guidance:
 /convex set up file uploads
 /convex add a Stripe webhook endpoint
 ```
-
-The command file is located at `command/convex.md`.
 
 ## Key Convex Concepts
 
@@ -178,28 +136,11 @@ export default defineSchema({
 });
 ```
 
-### Query with Index (not filter)
-
-```typescript
-// GOOD: Use withIndex
-const tasks = await ctx.db
-  .query("tasks")
-  .withIndex("by_user", (q) => q.eq("userId", args.userId))
-  .collect();
-
-// BAD: Never use filter for indexed fields
-const tasks = await ctx.db
-  .query("tasks")
-  .filter((q) => q.eq(q.field("userId"), args.userId))
-  .collect();
-```
-
 ## References
 
 - Convex Documentation: https://docs.convex.dev/
-- Convex LLMs.txt: https://docs.convex.dev/llms.txt (fetch this for latest docs)
-- Best Practices: https://docs.convex.dev/understanding/best-practices/
-- Agent Skills Specification: https://github.com/anthropics/skills
+- Convex LLMs.txt: https://docs.convex.dev/llms.txt
+- Agent Skills Specification: https://agentskills.io/
 
 ## License
 

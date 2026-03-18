@@ -4,54 +4,17 @@ This folder enables Codex to auto-discover Convex skills from this repository.
 
 ## Setup
 
-Codex auto-discovers skills from `.codex/skills` at the repo root. To link the skills:
+The `.codex/skills/convex` symlink points to `../../skills/convex`, so Codex auto-discovers the consolidated skill.
 
-```bash
-# From the repo root
-ln -s ../skills .codex/skills
-```
-
-Or copy specific skills:
+To set up in your own project:
 
 ```bash
 mkdir -p .codex/skills
-cp -r skills/convex-best-practices .codex/skills/
-cp -r skills/convex-functions .codex/skills/
+ln -s ../../skills/convex .codex/skills/convex
 ```
 
-## Standard Agent Skills Path
+## Available
 
-Some tools are standardizing on `.agents/skills`. You can mirror the repo skills there as well:
-
-```bash
-# From the repo root
-ln -s ../skills .agents/skills
-```
-
-## Alternative: Install to CODEX_HOME
-
-For global access across all projects:
-
-```bash
-# Defaults to ~/.codex if CODEX_HOME is unset
-cp -r skills/* "$CODEX_HOME/skills/"
-```
-
-## Available Skills
-
-All skills in the `skills/` directory are available for Codex:
-
-- convex-best-practices
-- convex-functions
-- convex-realtime
-- convex-schema-validator
-- convex-file-storage
-- convex-agents
-- convex-cron-jobs
-- convex-http-actions
-- convex-migrations
-- convex-security-check
-- convex-security-audit
-- convex-component-authoring
+Single consolidated `convex` skill with 13 reference files under `skills/convex/references/`.
 
 See the main [README](/README.md) for full documentation.

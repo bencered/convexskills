@@ -16,25 +16,12 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const packageRoot = join(__dirname, "..");
 
-const SKILLS = {
-  "convex-best-practices":
-    "Guidelines for building production-ready Convex apps",
-  "convex-functions": "Writing queries, mutations, actions, and HTTP actions",
-  "convex-realtime": "Patterns for building reactive applications",
-  "convex-schema-validator": "Database schema definition and validation",
-  "convex-file-storage": "File upload, storage, and serving",
-  "convex-agents": "Building AI agents with Convex",
-  "convex-cron-jobs": "Scheduled functions and background tasks",
-  "convex-http-actions": "HTTP endpoints and webhook handling",
-  "convex-migrations": "Schema evolution and data migrations",
-  "convex-security-check": "Quick security audit checklist",
-  "convex-security-audit": "Deep security review patterns",
-  "convex-component-authoring": "Creating reusable Convex components",
-};
+const { REFERENCES } = await import(join(packageRoot, "index.js"));
 
 const TARGET_ALIASES = new Map([
   ["claude", ".claude/skills"],
   ["codex", ".codex/skills"],
+  ["cursor", ".cursor/skills"],
   ["agents", ".agents/skills"],
 ]);
 
@@ -46,40 +33,44 @@ USAGE:
   convex-skills <command> [options]
 
 COMMANDS:
-  list                    List all available skills
-  install <skill>         Install a skill to .claude/skills/
-  install-all             Install all skills to .claude/skills/
+  list                    List the skill and its references
+  install                 Install the convex skill to your project
   install-templates       Install template files to your project
-  path <skill>            Print the path to a skill file
-  show <skill>            Print a skill's content
+  show [reference]        Print skill content (or a specific reference)
+  path [reference]        Print the path to the skill or a reference file
 
 OPTIONS:
   --dir <path>            Target directory (default: current directory)
-  --target <name|path>     Install target: claude, codex, agents, or a path
-  --link                  Symlink SKILL.md instead of copying
+  --target <name|path>    Install target: claude, codex, cursor, agents, or a path
+  --link                  Symlink instead of copying
   --help, -h              Show this help message
 
 EXAMPLES:
   convex-skills list
-  convex-skills install convex-best-practices
-  convex-skills install-all
-  convex-skills install-all --target agents
-  convex-skills install convex-functions --target .agents/skills
-  convex-skills install convex-best-practices --target codex --link
+  convex-skills install
+  convex-skills install --target agents
+  convex-skills install --target cursor --link
   convex-skills install-templates
-  convex-skills show convex-functions
+  convex-skills show
+  convex-skills show functions
+  convex-skills show agents
+  convex-skills path                  Print path to main SKILL.md
+  convex-skills path functions        Print path to a reference file
+  convex-skills path convex-functions (v1 names also work)
 
-AVAILABLE SKILLS:
-${Object.entries(SKILLS)
-  .map(([name, desc]) => `  ${name.padEnd(30)} ${desc}`)
+REFERENCES:
+${Object.entries(REFERENCES)
+  .map(([name, desc]) => `  ${name.padEnd(25)} ${desc}`)
   .join("\n")}
 `);
 }
 
 function listSkills() {
-  console.log("\nAvailable Convex Skills:\n");
-  Object.entries(SKILLS).forEach(([name, desc]) => {
-    console.log(`  ${name.padEnd(30)} ${desc}`);
+  console.log("\nConvex Skill (consolidated)\n");
+  console.log("  convex                       Comprehensive Convex platform skill\n");
+  console.log("References:\n");
+  Object.entries(REFERENCES).forEach(([name, desc]) => {
+    console.log(`  ${name.padEnd(25)} ${desc}`);
   });
   console.log("");
 }
@@ -104,47 +95,40 @@ function resolveTargetSkillsDir(targetDir, target) {
   return resolved.endsWith("skills") ? resolved : join(resolved, "skills");
 }
 
-function installSkill(skillName, targetSkillsDir, useSymlink) {
-  const skillsPath = join(packageRoot, "skills", skillName, "SKILL.md");
+function installSkill(targetSkillsDir, useSymlink) {
+  const skillSrc = join(packageRoot, "skills", "convex");
+  const targetPath = join(targetSkillsDir, "convex");
 
-  if (!existsSync(skillsPath)) {
-    console.error(`Error: Skill not found: ${skillName}`);
-    console.log("Run 'convex-skills list' to see available skills.");
-    process.exit(1);
-  }
-
-  const targetPath = join(targetSkillsDir, skillName, "SKILL.md");
-  const targetSkillDir = dirname(targetPath);
-
-  ensureDir(targetSkillDir);
+  ensureDir(targetPath);
 
   if (useSymlink) {
-    if (!existsSync(targetPath)) {
-      symlinkSync(skillsPath, targetPath);
+    const skillMdSrc = join(skillSrc, "SKILL.md");
+    const skillMdDest = join(targetPath, "SKILL.md");
+    if (!existsSync(skillMdDest)) {
+      symlinkSync(skillMdSrc, skillMdDest);
     }
-    console.log(`Linked ${skillName} to ${targetPath}`);
+    // Symlink references dir
+    const refsSrc = join(skillSrc, "references");
+    const refsDest = join(targetPath, "references");
+    if (!existsSync(refsDest)) {
+      symlinkSync(refsSrc, refsDest);
+    }
+    console.log(`Linked convex skill to ${targetPath}`);
     return;
   }
 
-  copyFileSync(skillsPath, targetPath);
-  console.log(`Installed ${skillName} to ${targetPath}`);
-}
+  // Copy SKILL.md
+  copyFileSync(join(skillSrc, "SKILL.md"), join(targetPath, "SKILL.md"));
 
-function installAllSkills(targetSkillsDir, useSymlink) {
-  const skillsDir = join(packageRoot, "skills");
-  const skills = readdirSync(skillsDir, { withFileTypes: true })
-    .filter((dirent) => dirent.isDirectory())
-    .map((dirent) => dirent.name);
+  // Copy references/
+  const refsSrc = join(skillSrc, "references");
+  const refsDest = join(targetPath, "references");
+  ensureDir(refsDest);
+  for (const file of readdirSync(refsSrc)) {
+    copyFileSync(join(refsSrc, file), join(refsDest, file));
+  }
 
-  console.log(`Installing ${skills.length} skills...\n`);
-
-  skills.forEach((skillName) => {
-    installSkill(skillName, targetSkillsDir, useSymlink);
-  });
-
-  console.log(
-    `\nDone! Installed ${skills.length} skills to ${targetSkillsDir}`,
-  );
+  console.log(`Installed convex skill (with ${readdirSync(refsSrc).length} references) to ${targetPath}`);
 }
 
 function installTemplates(targetDir) {
@@ -187,27 +171,21 @@ function installTemplates(targetDir) {
   console.log("\nDone!");
 }
 
-function showSkill(skillName) {
-  const skillsPath = join(packageRoot, "skills", skillName, "SKILL.md");
-
-  if (!existsSync(skillsPath)) {
-    console.error(`Error: Skill not found: ${skillName}`);
-    process.exit(1);
+function showSkill(refName) {
+  if (!refName) {
+    // Show main SKILL.md
+    const skillPath = join(packageRoot, "skills", "convex", "SKILL.md");
+    console.log(readFileSync(skillPath, "utf-8"));
+    return;
   }
 
-  const content = readFileSync(skillsPath, "utf-8");
-  console.log(content);
-}
-
-function printSkillPath(skillName) {
-  const skillsPath = join(packageRoot, "skills", skillName, "SKILL.md");
-
-  if (!existsSync(skillsPath)) {
-    console.error(`Error: Skill not found: ${skillName}`);
+  const refPath = join(packageRoot, "skills", "convex", "references", `${refName}.md`);
+  if (!existsSync(refPath)) {
+    console.error(`Error: Reference not found: ${refName}`);
+    console.log("Run 'convex-skills list' to see available references.");
     process.exit(1);
   }
-
-  console.log(skillsPath);
+  console.log(readFileSync(refPath, "utf-8"));
 }
 
 // Parse arguments
@@ -244,32 +222,35 @@ switch (command) {
     listSkills();
     break;
   case "install":
-    if (!arg) {
-      console.error("Error: Please specify a skill to install.");
-      console.log("Run 'convex-skills list' to see available skills.");
-      process.exit(1);
+    if (arg && arg !== "convex") {
+      console.warn(`Warning: Individual skill "${arg}" no longer exists. Since v2.0, all skills are consolidated into a single "convex" skill with references.`);
+      console.warn(`Installing the full convex skill instead. Use "convex-skills show ${arg.replace(/^convex-/, "")}" to view a specific reference.\n`);
     }
-    installSkill(arg, targetSkillsDir, useSymlink);
+    installSkill(targetSkillsDir, useSymlink);
     break;
   case "install-all":
-    installAllSkills(targetSkillsDir, useSymlink);
+    // Backward compat — same as install now
+    installSkill(targetSkillsDir, useSymlink);
     break;
   case "install-templates":
     installTemplates(targetDir);
     break;
   case "show":
-    if (!arg) {
-      console.error("Error: Please specify a skill to show.");
-      process.exit(1);
-    }
     showSkill(arg);
     break;
   case "path":
-    if (!arg) {
-      console.error("Error: Please specify a skill.");
-      process.exit(1);
+    if (arg && arg !== "convex") {
+      const refName = arg.replace(/^convex-/, "");
+      const refPath = join(packageRoot, "skills", "convex", "references", `${refName}.md`);
+      if (existsSync(refPath)) {
+        console.log(refPath);
+      } else {
+        console.error(`Reference not found: ${refName}`);
+        process.exit(1);
+      }
+    } else {
+      console.log(join(packageRoot, "skills", "convex", "SKILL.md"));
     }
-    printSkillPath(arg);
     break;
   case "--help":
   case "-h":

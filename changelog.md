@@ -5,34 +5,80 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+
 ## [Unreleased]
 
-### Changed
+No unreleased changes.
 
-- Updated README.md to reference official Convex Agent Plugins repo as the primary resource
-- Fixed typo in README heading ("offical" to "official")
-- Removed banned word "comprehensive" from README description
-- Updated package.json npm description to reference official Convex Agent Plugins
+## [2.0.0] - 2026-03-18
+
+### Breaking Changes
+
+- **Consolidated 14 discrete skill directories into a single `convex` skill** with a `references/` folder, following the [cloudflare/skills](https://github.com/cloudflare/skills) pattern
+- **npm API changed**: `SKILLS` export replaced by `REFERENCES` with new keys (e.g. `"convex-functions"` → `"functions"`). A `SKILLS` alias is kept with both old and new keys for backward compat, but prefer `REFERENCES`. `getSkill("convex-best-practices")` no longer works — use `getReference("convex", "best-practices")` instead. `getSkillPath()` now resolves old names to reference file paths.
+- **`CLAUDE.md` removed from npm package** — it was a symlink to `agents.md`, which is now included directly. Tools looking for `CLAUDE.md` in `node_modules` should use `agents.md` instead.
+- **CLI changed**: `convex-skills install <skill-name>` is removed; use `convex-skills install` (installs the full skill with all references)
+- Old skill directory paths (`skills/convex-functions/SKILL.md` etc.) no longer exist
+
+### Migration from 1.x
+
+**npm programmatic API:**
+```js
+// Before (1.x)
+import { getSkill, SKILLS } from "@waynesutton/convex-skills";
+const content = getSkill("convex-best-practices");
+
+// After (2.x)
+import { getSkill, getReference, REFERENCES } from "@waynesutton/convex-skills";
+const skill = getSkill("convex");          // main SKILL.md
+const ref = getReference("convex", "best-practices"); // specific reference
+```
+
+**CLI:**
+```bash
+# Before (1.x)
+convex-skills install convex-best-practices
+convex-skills install-all
+
+# After (2.x)
+convex-skills install              # installs full skill + references
+convex-skills show best-practices  # view a specific reference
+```
 
 ### Added
 
-- Support for `.agents/skills` installs via CLI `--target`
-- Optional `--link` flag to symlink SKILL.md files instead of copying
+- `skills/convex/references/` directory with 13 reference files
+- New `SKILL.md` entry point with decision trees and reference index
+- `.claude-plugin/marketplace.json` for Claude Code plugin marketplace
+- `.cursor-plugin/` directory for Cursor support
+- `compatibility` and `allowed-tools` fields in SKILL.md frontmatter (per agentskills.io spec)
+- `getReference()` and `listReferences()` programmatic API exports
+- `convex-skills show [reference]` CLI command
+- `cursor` as a `--target` alias in CLI
 
 ### Changed
 
+- All 13 discrete SKILL.md files moved to `skills/convex/references/` as plain markdown (frontmatter stripped)
+- `SKILL.md` frontmatter now spec-compliant per agentskills.io
+- `index.js` and `bin/cli.js` rewritten for consolidated structure
+- `command/convex.md` updated to reference new paths
+- `agents.md`, `.codex/README.md`, `README.md`, `docs.md`, `files.md` updated
+- `package.json` version bumped to 2.0.0
+- Updated README.md to reference official Convex Agent Plugins repo as the primary resource
+- Fixed typo in README heading ("offical" to "official")
 - Consolidated `convex-eslint` skill into `convex-best-practices` Code Quality section
-- ESLint setup instructions now include config example and rules table in one place
-- Updated cross-references in `convex-functions`, README, AGENTS.md, and .codex/README.md
 
 ### Removed
 
+- 13 individual skill directories (`skills/convex-functions/`, `skills/convex-agents/`, etc.)
 - Deleted standalone `skills/convex-eslint/` directory (content merged into convex-best-practices)
-- Removed `convex-eslint` from SKILLS constants in index.js and bin/cli.js
 
 ### Fixed
 
-- Removed unsupported frontmatter fields from `skills/convex-best-practices/SKILL.md` to avoid Pi skill parser conflicts
+- Removed unsupported frontmatter fields to avoid Pi skill parser conflicts
+- Per-skill `agents/openai.yaml` and `assets/` duplicates
+- `.DS_Store` files (added to `.gitignore`)
+
 
 ## [1.0.7] - 2026-02-02
 
@@ -49,7 +95,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Compressed Convex docs index pointing to https://docs.convex.dev/llms.txt
   - Instruction to prefer retrieval over pre-training for Convex tasks
 - Quick Reference section with common code patterns (function syntax, schema, queries)
-- `prds/how-it-works.md`: Internal documentation explaining AGENTS.md vs Skills approach
 - Dual-approach architecture: passive context (AGENTS.md) + on-demand skills
 
 ### Changed
@@ -62,89 +107,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added missing convex-eslint to bin/cli.js SKILLS object
 
-### Notes
-
-Based on Vercel's research showing AGENTS.md with docs index achieves 100% pass rate vs 53% for skills alone.
-See: https://vercel.com/blog/agents-md-outperforms-skills-in-our-agent-evals
-
 ## [1.0.5] - 2026-02-02
 
 ### Added
 
-- `skills/convex-eslint/SKILL.md`: ESLint compliance skill for writing linter-clean Convex code
-  - Covers all four @convex-dev/eslint-plugin rules
-  - Setup instructions for eslint.config.js
-  - Code examples for each rule (no-old-registered-function-syntax, require-argument-validators, explicit-table-ids, import-wrong-runtime)
+- `skills/convex-eslint/SKILL.md`: ESLint compliance skill
 - `.codex/README.md`: Codex CLI integration instructions
-- Code Quality sections in `convex-functions` and `convex-best-practices` skills
-- Linting section in `templates/CLAUDE.md`
-- Code Quality section in `README.md`
-
-### Changed
-
-- Updated all db.get, db.patch, db.delete, db.replace calls in skills to use explicit table names
-- Updated `README.md` Available Skills table to include convex-eslint
-- Updated `AGENTS.md` and `CLAUDE.md` to include convex-eslint in skills list
-- Updated `index.js` SKILLS constant with convex-eslint
-- Updated `package.json` version to 1.0.5, added eslint and linting keywords
-- Updated `files.md` to document convex-eslint skill and .codex directory
-- Updated repository structure in README to include .codex folder
+- Code Quality sections in skills and templates
 
 ## [1.0.4] - 2026-01-14
 
 ### Added
 
 - Template skills for developers who fork the repository
-  - `templates/skills/README.md`: Installation and usage guide
-  - `templates/skills/dev.md`: Full-stack development practices template
-  - `templates/skills/help.md`: Problem-solving methodology template
-  - `templates/skills/gitrules.md`: Git safety protocols template
-- `files.md`: Codebase structure reference
-- `task.md`: Completed task tracking
-- `docs.md`: Documentation index
+- `files.md`, `task.md`, `docs.md`
 - `skills/convex/SKILL.md`: Umbrella skill indexing all Convex skills
-
-### Changed
-
-- Updated `README.md` with templates section and repository structure
 
 ### Fixed
 
 - Skill `name` field now matches folder name for `/skill` commands to work
-  - Changed from human readable (e.g., `Convex Best Practices`) to kebab-case (e.g., `convex-best-practices`)
-  - Added `displayName` field for human readable names
-  - Affects all 12 Convex skill files
 
 ## [1.0.0] - 2026-01-14
 
 ### Added
 
-- Initial repository structure mirroring getsentry/skills pattern
-- 9 core Convex skills:
-  - `convex-best-practices`: Production-ready app guidelines, error handling, OCC
-  - `convex-functions`: Queries, mutations, actions, HTTP actions
-  - `convex-realtime`: Reactive patterns, subscriptions, optimistic updates
-  - `convex-schema-validator`: Schema definition, typing, validation, migrations
-  - `convex-file-storage`: File upload, storage, serving, metadata
-  - `convex-agents`: AI agents with thread management and tools
-  - `convex-security-check`: Quick security audit checklist
-  - `convex-security-audit`: Deep security review patterns
-  - `convex-component-authoring`: Creating reusable Convex components
-- Skill template following Anthropic approved format
-- Terminal UI for skill browsing with amber/gold tree design
-- GEMINI.md for Gemini CLI integration
-- agents.md specification for Convex agents
-- CLAUDE.md template for Convex projects
-- Future skills exploration document
-- OpenCode plugin for Convex sync:
-  - Plugin hooks for session, file, and tool events
-  - Custom tools (schema_suggest, function_test, migration_plan)
-  - Agent templates (convex-build.md, convex-debug.md)
-  - Command templates (convex-init, convex-deploy, convex-logs)
-  - Installation script
-- Phase 3 documentation recommendations for Convex docs
-- Phase 4 documentation recommendations for convex.dev/ai
-- Project tracking files (files.md, changelog.md)
-- README.md with installation instructions
-- CONTRIBUTING.md with guidelines
-- MIT License
+- Initial repository with 9 core Convex skills
+- GEMINI.md, agents.md, CLAUDE.md
+- OpenCode plugin for Convex sync
+- README.md, CONTRIBUTING.md, MIT License

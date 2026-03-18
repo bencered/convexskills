@@ -1,0 +1,15 @@
+{
+  "$schema": "https://code.claude.com/schemas/marketplace.json",
+  "name": "convex-skills",
+  "owner": {
+    "name": "Convex",
+    "url": "https://github.com/waynesutton"
+  },
+  "plugins": [
+    {
+      "name": "convex-skills",
+      "source": "./",
+      "description": "Skills for building production-ready applications with Convex"
+    }
+  ]
+}

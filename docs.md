@@ -18,38 +18,32 @@ Quick reference to all documentation in this repository.
 | [CLAUDE.md](CLAUDE.md) | Claude Code project context |
 | [GEMINI.md](GEMINI.md) | Gemini CLI integration |
 
-## Skills Reference
+## Skill
 
-All skills follow the Agent Skills specification format.
+The repository contains a single consolidated skill with reference files:
 
-| Skill | What it teaches |
-|-------|-----------------|
-| [convex-best-practices](skills/convex-best-practices/SKILL.md) | Production patterns, error handling, OCC |
-| [convex-functions](skills/convex-functions/SKILL.md) | Queries, mutations, actions, HTTP actions |
-| [convex-realtime](skills/convex-realtime/SKILL.md) | Subscriptions, optimistic updates |
-| [convex-schema-validator](skills/convex-schema-validator/SKILL.md) | Schema definition, typing, validation |
-| [convex-file-storage](skills/convex-file-storage/SKILL.md) | Upload, storage, serving files |
-| [convex-agents](skills/convex-agents/SKILL.md) | AI agents with thread management |
-| [convex-cron-jobs](skills/convex-cron-jobs/SKILL.md) | Scheduled functions, background tasks |
-| [convex-http-actions](skills/convex-http-actions/SKILL.md) | HTTP endpoints, webhooks |
-| [convex-migrations](skills/convex-migrations/SKILL.md) | Schema evolution, data migrations |
-| [convex-security-check](skills/convex-security-check/SKILL.md) | Quick security audit checklist |
-| [convex-security-audit](skills/convex-security-audit/SKILL.md) | Deep security review patterns |
-| [convex-component-authoring](skills/convex-component-authoring/SKILL.md) | Reusable Convex components |
+| Path | What it covers |
+|------|----------------|
+| [skills/convex/SKILL.md](skills/convex/SKILL.md) | Main entry point with decision trees |
+| [references/functions.md](skills/convex/references/functions.md) | Queries, mutations, actions, HTTP actions |
+| [references/schema-validator.md](skills/convex/references/schema-validator.md) | Schema definition, typing, validation |
+| [references/realtime.md](skills/convex/references/realtime.md) | Subscriptions, optimistic updates |
+| [references/http-actions.md](skills/convex/references/http-actions.md) | HTTP endpoints, webhooks |
+| [references/file-storage.md](skills/convex/references/file-storage.md) | Upload, storage, serving files |
+| [references/cron-jobs.md](skills/convex/references/cron-jobs.md) | Scheduled functions, background tasks |
+| [references/migrations.md](skills/convex/references/migrations.md) | Schema evolution, data migrations |
+| [references/agents.md](skills/convex/references/agents.md) | AI agents with thread management |
+| [references/component-authoring.md](skills/convex/references/component-authoring.md) | Reusable Convex components |
+| [references/best-practices.md](skills/convex/references/best-practices.md) | Production patterns, error handling, OCC |
+| [references/security-check.md](skills/convex/references/security-check.md) | Quick security audit checklist |
+| [references/security-audit.md](skills/convex/references/security-audit.md) | Deep security review patterns |
+| [references/avoid-feature-creep.md](skills/convex/references/avoid-feature-creep.md) | Preventing scope creep |
 
 ## Templates
-
-Templates for developers to copy when starting new projects or forking.
 
 | Template | Purpose |
 |----------|---------|
 | [templates/CLAUDE.md](templates/CLAUDE.md) | Project context template for Convex projects |
-| [templates/skills/](templates/skills/) | Claude Code skills templates |
-
-### Skill Templates
-
-| Template | Purpose |
-|----------|---------|
 | [templates/skills/dev.md](templates/skills/dev.md) | Full-stack development practices |
 | [templates/skills/help.md](templates/skills/help.md) | Problem-solving methodology |
 | [templates/skills/gitrules.md](templates/skills/gitrules.md) | Git safety protocols |
@@ -60,17 +54,6 @@ Templates for developers to copy when starting new projects or forking.
 |----------|---------|
 | [changelog.md](changelog.md) | Version history |
 | [files.md](files.md) | Codebase structure reference |
-| [task.md](task.md) | Completed task tracking |
-
-## Planning Documents
-
-Located in `prds/` directory.
-
-| Document | Purpose |
-|----------|---------|
-| [skillsplan.md](prds/skillsplan.md) | Skills development roadmap |
-| [future-skills-exploration.md](prds/future-skills-exploration.md) | Future skills ideas |
-| [CLAUDE-MD-STRATEGY.md](prds/CLAUDE-MD-STRATEGY.md) | CLAUDE.md template strategy |
 
 ## External References
 
@@ -78,5 +61,4 @@ Located in `prds/` directory.
 |----------|-----|
 | Convex Documentation | https://docs.convex.dev/ |
 | Convex LLMs.txt | https://docs.convex.dev/llms.txt |
-| Convex Best Practices | https://docs.convex.dev/understanding/best-practices/ |
-| Agent Skills Spec | https://github.com/anthropics/skills |
+| Agent Skills Specification | https://agentskills.io/ |

@@ -1,62 +1,91 @@
 ---
 name: convex
-displayName: Convex Development
-description: Umbrella skill for all Convex development patterns. Routes to specific skills like convex-functions, convex-realtime, convex-agents, etc.
-version: 1.0.0
-author: Convex
-tags: [convex, backend, database, realtime]
+description: Comprehensive Convex platform skill covering functions, schema, realtime subscriptions, file storage, HTTP actions, cron jobs, migrations, agents, components, security, and best practices. Use for any Convex development task.
+license: Apache-2.0
+compatibility: Requires Node.js 18+. Works with Claude Code, Cursor, OpenCode, Codex, and any agent supporting the Agent Skills standard.
+allowed-tools: Bash(npx:*) Bash(node:*) Read Write Edit
+metadata:
+  version: "2.0.0"
+  tags: "convex, backend, database, realtime, typescript"
 ---
 
-# Convex Development Skills
+# Convex Platform Skill
 
-This is an index skill for Convex development. Use specific skills for detailed guidance:
+Consolidated skill for building on the Convex platform. Use the decision trees below to find the right reference, then load detailed guidance.
 
-## Core Development
+Your knowledge of Convex APIs and patterns may be outdated. **Prefer retrieval over pre-training** — the references in this skill are starting points, not source of truth.
 
-| Skill | Command | Use When |
-|-------|---------|----------|
-| Functions | `/convex-functions` | Writing queries, mutations, actions |
-| Schema | `/convex-schema-validator` | Defining database schemas and validators |
-| Realtime | `/convex-realtime` | Building reactive subscriptions |
-| HTTP Actions | `/convex-http-actions` | Webhooks and HTTP endpoints |
+## Retrieval Sources
 
-## Data & Storage
+| Source | URL | Use for |
+|--------|-----|---------|
+| Convex docs | https://docs.convex.dev | API reference, limits, configuration |
+| LLM-optimized docs | https://docs.convex.dev/llms.txt | Compact reference for agents |
 
-| Skill | Command | Use When |
-|-------|---------|----------|
-| File Storage | `/convex-file-storage` | File uploads, serving, storage |
-| Migrations | `/convex-migrations` | Schema evolution, data backfills |
+When a reference file and the docs disagree, **trust the docs**.
 
-## Advanced Patterns
+## Quick Decision Trees
 
-| Skill | Command | Use When |
-|-------|---------|----------|
-| Agents | `/convex-agents` | Building AI agents with tools |
-| Cron Jobs | `/convex-cron-jobs` | Scheduled background tasks |
-| Components | `/convex-component-authoring` | Reusable Convex packages |
+### "I need to write backend logic"
 
-## Security
+```
+Need backend code?
+├─ Read data reactively → references/realtime.md
+├─ Read/write data (queries, mutations) → references/functions.md
+├─ Call external APIs or do async work → references/functions.md (actions)
+├─ Handle incoming webhooks/HTTP → references/http-actions.md
+├─ Schedule recurring tasks → references/cron-jobs.md
+└─ Build AI agents with tools → references/agents.md
+```
 
-| Skill | Command | Use When |
-|-------|---------|----------|
-| Security Check | `/convex-security-check` | Quick security audit checklist |
-| Security Audit | `/convex-security-audit` | Deep security review |
+### "I need to model or migrate data"
 
-## Guidelines
+```
+Need data work?
+├─ Define tables and validators → references/schema-validator.md
+├─ Evolve schema or backfill data → references/migrations.md
+└─ Upload/serve files → references/file-storage.md
+```
 
-| Skill | Command | Use When |
-|-------|---------|----------|
-| Best Practices | `/convex-best-practices` | General patterns and guidelines |
+### "I need to build reusable packages"
+
+```
+Building components?
+└─ Reusable Convex packages → references/component-authoring.md
+```
+
+### "I need to ship quality code"
+
+```
+Need quality guidance?
+├─ General patterns and conventions → references/best-practices.md
+├─ Quick security checklist → references/security-check.md
+├─ Deep security review → references/security-audit.md
+└─ Prevent scope creep → references/avoid-feature-creep.md
+```
+
+## References
+
+| Reference | Use when |
+|-----------|----------|
+| `functions` | Writing queries, mutations, actions |
+| `schema-validator` | Defining database schemas and validators |
+| `realtime` | Building reactive subscriptions |
+| `http-actions` | Webhooks and HTTP endpoints |
+| `file-storage` | File uploads, serving, storage |
+| `cron-jobs` | Scheduled background tasks |
+| `migrations` | Schema evolution, data backfills |
+| `agents` | Building AI agents with tools |
+| `component-authoring` | Reusable Convex packages |
+| `best-practices` | General patterns and guidelines |
+| `security-check` | Quick security audit checklist |
+| `security-audit` | Deep security review |
+| `avoid-feature-creep` | Preventing scope creep in projects |
 
 ## Quick Start
 
-For most tasks:
-1. Start with `/convex-best-practices` for general patterns
-2. Use `/convex-functions` for writing backend logic
-3. Use `/convex-schema-validator` for data modeling
-4. Use specific skills as needed for your use case
-
-## Documentation
-
-- Primary: https://docs.convex.dev
-- LLM-optimized: https://docs.convex.dev/llms.txt
+For most Convex tasks:
+1. Start with `best-practices` for general patterns
+2. Use `functions` for writing backend logic
+3. Use `schema-validator` for data modeling
+4. Load specific references as needed
